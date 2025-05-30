@@ -2,6 +2,8 @@ import streamlit as st
 import os
 from datetime import datetime, timedelta
 from PIL import Image
+import folium
+from streamlit_folium import st_folium
 
 # Configuration
 IMAGE_FOLDER = "images"
