@@ -9,10 +9,6 @@ import streamlit.components.v1 as components
 from streamlit_folium import folium_static
 import io
 import tempfile
-import glob
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
 
 # Define available sites and coordinates
 sites = {
@@ -135,71 +131,4 @@ with col2:
                with cols[i % 4]:
                    image = Image.open(filepath)
                    st.image(image, caption=f"{hour_str}:00", use_container_width=True)
-
-   # Option to show BLH chart
-   show_blh = st.checkbox("Show Boundary Layer Height (BLH) chart for this day")
-
-   if show_blh:
-      # --- Boundary Layer Height Plot Section ---
-      st.subheader("Boundary Layer Height (BLH) Over Time")
-
-      # Format date string
-      date_str = selected_date.strftime("%Y%m%d")
-
-      # Search for the BLH CSV matching the selected site and date
-      blh_folder = "blh_csv"
-      blh_pattern = f"L3_*_{date_str}_{selected_site.split('_')[0]}.csv"
-      blh_matches = glob.glob(os.path.join(blh_folder, blh_pattern))
-
-      if blh_matches:
-          blh_filepath = blh_matches[0]  # use the first match
-          try:
-              blh_df = pd.read_csv(blh_filepath)
-
-              # Expecting columns: 'time' (like "00", "01", ...) and 'bl_height'
-              # Try to auto-detect the correct column names if needed
-              time_col = [col for col in blh_df.columns if "time" in col.lower()]
-              bl_col = [col for col in blh_df.columns if "bl" in col.lower() or "height" in col.lower()]
-
-              if time_col and bl_col:
-                  time_col = time_col[0]
-                  bl_col = bl_col[0]
-
-                  fig, ax = plt.subplots()
-                  # Convert time column to datetime
-                  # blh_df[time_col] = pd.to_datetime(blh_df[time_col], dayfirst=True, errors='coerce')
-                  # Parse time column with dayfirst format
-                  blh_df[time_col] = pd.to_datetime(blh_df[time_col], dayfirst=True, errors='coerce')
-
-                  # Replace -999 with NaN in BLH column
-                  blh_df[bl_col] = pd.to_numeric(blh_df[bl_col], errors='coerce')
-                  blh_df[bl_col] = blh_df[bl_col].replace(-999, np.nan)
-
-                  # Drop rows with missing time or BLH
-                  blh_df = blh_df.dropna(subset=[time_col, bl_col])
-
-                  # Drop rows with invalid datetime
-                  blh_df = blh_df.dropna(subset=[time_col])
-
-                  # Plot
-                  fig, ax = plt.subplots(figsize=(10, 4))
-                  ax.plot(blh_df[time_col], blh_df[bl_col], marker='o', linestyle='-')
-
-                  # Format x-axis
-                  ax.set_xlabel("Time ")
-                  ax.set_ylabel("Boundary Layer Height (m)")
-                  ax.set_title(f"BLH for {selected_site} on {selected_date.strftime('%Y-%m-%d')}")
-                  ax.grid(True)
-
-                  # Format datetime ticks
-                  fig.autofmt_xdate(rotation=45)
-                  ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%H:%M'))
-
-                  st.pyplot(fig)
-              else:
-                  st.warning("Could not find expected 'time' and 'BL height' columns in the CSV.")
-          except Exception as e:
-              st.error(f"Error reading BLH CSV: {e}")
-      else:
-          st.info("Boundary Layer Height (BLH) data not available for this site and date.")
 
