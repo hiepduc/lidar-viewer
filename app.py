@@ -196,6 +196,28 @@ with col2:
                   ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter('%H:%M'))
 
                   st.pyplot(fig)
+                  # --- Add download buttons ---
+                  # 1. Download the BLH CSV
+                  st.download_button(
+                      label="Download BLH CSV",
+                      data=blh_df.to_csv(index=False),
+                      file_name=os.path.basename(blh_filepath),
+                      mime="text/csv"
+                  )
+
+                  # 2. Download the chart as PNG
+                  # Save matplotlib figure to buffer
+                  img_buffer = io.BytesIO()
+                  fig.savefig(img_buffer, format='png')
+                  img_buffer.seek(0)
+
+                  st.download_button(
+                      label="Download BLH Chart (PNG)",
+                      data=img_buffer,
+                      file_name=f"{selected_site}_{date_str}_blh_chart.png",
+                      mime="image/png"
+                  )
+
               else:
                   st.warning("Could not find expected 'time' and 'BL height' columns in the CSV.")
           except Exception as e:
