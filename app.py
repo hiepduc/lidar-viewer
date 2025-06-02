@@ -141,7 +141,7 @@ with col2:
 
    if show_blh:
       # --- Boundary Layer Height Plot Section ---
-      st.subheader("Boundary Layer Height (BLH) Over Time")
+      st.subheader("Boundary Layer Height (BLH) versus Time (UTC)")
 
       # Format date string
       date_str = selected_date.strftime("%Y%m%d")
