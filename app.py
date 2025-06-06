@@ -59,12 +59,30 @@ with col2:
    # Site selection
    selected_site = st.selectbox("Select Site", SITE_OPTIONS)
 
-   all_files = [f for f in os.listdir(IMAGE_FOLDER) if f.endswith(".png")]
-   available_dates = sorted({
+
+   # Get .png dates from IMAGE_FOLDER
+   png_dates = {
        f.split("_")[-1][:8]
-       for f in all_files
-       if f.startswith(selected_site)
-   })
+       for f in os.listdir(IMAGE_FOLDER)
+       if f.endswith(".png") and f.startswith(selected_site)
+   }
+
+   # Get .csv dates from blh_csv folder
+   csv_dates = {
+       f.split("_")[-1][:8]
+       for f in os.listdir("blh_csv")
+       if f.endswith(".csv") and f.startswith(selected_site)
+   }
+
+   # Combine and sort
+   available_dates = sorted(png_dates.union(csv_dates))
+
+   #all_files = [f for f in os.listdir(IMAGE_FOLDER) if f.endswith(".png")]
+   #available_dates = sorted({
+   #    f.split("_")[-1][:8]
+   #    for f in all_files
+   #    if f.startswith(selected_site)
+   #})
 
    available_datetimes = [datetime.strptime(d, "%Y%m%d").date() for d in available_dates]
 
