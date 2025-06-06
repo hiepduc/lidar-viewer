@@ -68,10 +68,15 @@ with col2:
    }
 
    # Get .csv dates from blh_csv folder
+   site_prefix = selected_site.split("_")[0]
    csv_dates = {
-       f.split("_")[-1][:8]
+       f.split("_")[-2]
        for f in os.listdir("blh_csv")
-       if f.endswith(".csv") and f.startswith(selected_site)
+       if (
+           f.endswith(".csv")
+           and f.startswith("L3_")
+           and f.endswith(f"_{site_prefix}.csv")
+       )
    }
 
    # Combine and sort
