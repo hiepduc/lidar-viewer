@@ -1,0 +1,23 @@
+To monitor the file update on PC to transfer to SDC, 
+To make sure everything runs smoothly, ensure:
+
+Your Python script accepts the .nc file as an argument:
+Example (in extract_ncdf_tocsv.py):
+
+import sys
+file2 = sys.argv[1]
+You saved the WinSCP site as lidar_upload, and tested it in GUI.
+
+You run this script in a persistent PowerShell session:
+
+Use 
+
+powershell.exe -ExecutionPolicy Bypass -File watcher.ps1
+
+Or run it in a PowerShell console and keep it open
+
+Optionally, log output or errors:
+Add this inside your -Action block to log:
+
+"[$(Get-Date)] Uploaded $csvFile" | Out-File -Append "$env:TEMP\lidar_upload_log.txt"
+
