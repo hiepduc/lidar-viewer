@@ -120,44 +120,56 @@ with col2:
    selected_date = st.session_state.selected_date
    date_str = selected_date.strftime("%Y%m%d")
 
-   # Detect available hours
-   available_hours = []
-   for hour in range(24):
-       hour_str = f"{hour:02d}"
-       filename = f"{selected_site}_{date_str}{hour_str}00.png"
-       filepath = os.path.join(IMAGE_FOLDER, filename)
-       if os.path.exists(filepath):
-           available_hours.append(hour_str)
+   # Step 1: Find all files matching this site and date
+   pattern = os.path.join(IMAGE_FOLDER, f"{selected_site}_{date_str}*.png")
+   file_list = sorted(glob.glob(pattern))
 
-   # Dropdown to select hour
-   if available_hours:
-       selected_hour = st.selectbox("Select Hour", available_hours)
-       filename = f"{selected_site}_{date_str}{selected_hour}00.png"
-       filepath = os.path.join(IMAGE_FOLDER, filename)
-       if os.path.exists(filepath):
-           image = Image.open(filepath)
-           st.image(image, caption=f"{selected_site} - {selected_date} {selected_hour}:00", use_container_width=True)
-           # Add download button
-           with open(filepath, "rb") as img_file:
+   # Step 2: Extract available HHMM times
+   available_times = []
+   time_to_file = {}
+
+   for filepath in file_list:
+       filename = os.path.basename(filepath)
+       try:
+           # Extract HHMM from filename
+           timestamp = filename.replace(".png", "").split("_")[-1]  # e.g. '202506141437'
+           hhmm = timestamp[-4:]  # last 4 digits = HHMM
+           if len(hhmm) == 4 and hhmm.isdigit():
+               available_times.append(hhmm)
+               time_to_file[hhmm] = filepath
+       except Exception:
+           continue
+
+   # Step 3: Dropdown to select exact time (HHMM)
+   if available_times:
+       selected_time = st.selectbox("Select Time (HHMM)", sorted(available_times))
+       selected_filepath = time_to_file[selected_time]
+
+       if os.path.exists(selected_filepath):
+           image = Image.open(selected_filepath)
+           formatted_time = f"{selected_time[:2]}:{selected_time[2:]}"
+           st.image(image, caption=f"{selected_site} - {selected_date} {formatted_time}", use_container_width=True)
+
+           with open(selected_filepath, "rb") as img_file:
                st.download_button(
-               label="Download this image",
-               data=img_file,
-               file_name=filename,
-               mime="image/png"
-           )
+                   label="Download this image",
+                   data=img_file,
+                   file_name=os.path.basename(selected_filepath),
+                   mime="image/png"
+               )
    else:
-       st.warning(f"No images found for {selected_site} on {selected_date.strftime('%Y-%m-%d')}.")
-   # Optionally show all images in a grid
+       st.warning(f"No images found for {selected_site} on {selected_date}.")
+
+   # Step 4: Optional — Show all images for the day
    if st.checkbox("Show all available images for the day"):
-       st.subheader("Available Hourly Graphs")
+       st.subheader("Available Time-Stamped Images")
        cols = st.columns(4)
-       for i, hour_str in enumerate(available_hours):
-           filename = f"{selected_site}_{date_str}{hour_str}00.png"
-           filepath = os.path.join(IMAGE_FOLDER, filename)
+       for i, hhmm in enumerate(sorted(available_times)):
+           filepath = time_to_file[hhmm]
            if os.path.exists(filepath):
                with cols[i % 4]:
                    image = Image.open(filepath)
-                   st.image(image, caption=f"{hour_str}:00", use_container_width=True)
+                   st.image(image, caption=f"{hhmm[:2]}:{hhmm[2:]}", use_container_width=True)
 
    # Option to show BLH chart
    show_blh = st.checkbox("Show Boundary Layer Height (BLH) chart for this day")
