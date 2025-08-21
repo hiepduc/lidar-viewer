@@ -1,0 +1,5 @@
+!$/bin/bash
+for f in Lidcombe_CEILOMETER_*.png; do
+   mv "$f" "${f/Lidcombe_CEILOMETER_/Lidcombe_Ceilometer_}"
+done
+
