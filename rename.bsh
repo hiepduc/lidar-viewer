@@ -1,0 +1,4 @@
+for f in Singleton_Ceilo_*.png; do
+    mv "$f" "${f/Singleton_Ceilo_/Singleton_Ceilometer_}"
+done
+
