@@ -16,7 +16,7 @@ import numpy as np
 # -----------------------------
 sites = {
     "Lidcombe": [-33.865, 151.045],
-    "Merriwa": [-32.15, 150.035],
+    "Merriwa": [-32.15, 150.35],
     "Rozelle": [-33.85, 151.17],
     "Singleton": [-32.57, 151.178],
     "Muswellbrook": [-32.261, 150.89],
@@ -56,13 +56,13 @@ with col1:
             - Commonly used in research on aerosol vertical distribution and boundary layer dynamics.  
 
             ---
-            The DCCEEW lidar network consists of the following sites
-                - Lidcombe: Vaisala CL51 and Cimel MPL CE376GPN_2401
-                - Merriwa : Vaisala CL61
-                - Rozelle : Vaisala CL61
-                - Campbelltown : Vaisala CL51
-                - Singleton: Vaisala CL61
-                - Muswellbrook : Vaisala CL61
+            The DCCEEW lidar network consists of the following sites.
+                - Lidcombe: Vaisala CL51 and Cimel MPL CE376GPN_2401.
+                - Merriwa : Vaisala CL61.
+                - Rozelle : Vaisala CL61.
+                - Campbelltown : Vaisala CL51.
+                - Singleton: Vaisala CL61.
+                - Muswellbrook : Vaisala CL61.
 
             📌 *Both instruments help us understand how pollution mixes and disperses in the atmosphere.*
             """,
