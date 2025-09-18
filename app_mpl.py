@@ -39,6 +39,36 @@ with col1:
         map_html = f.read()
     components.html(map_html, height=400, width=250)
 
+    # --- Sidebar info button ---
+    if st.sidebar.button("ℹ️ What are these instruments?"):
+        st.sidebar.markdown(
+            """
+            ### Lidar Instruments
+
+            **Ceilometer**  
+            - A vertically pointing laser instrument.  
+            - Detects cloud base height and estimates boundary layer height (BLH).  
+            - Provides continuous observations, widely used in air quality studies.
+
+            **MPL (Micro Pulse Lidar)**  
+            - A more sensitive laser instrument compared to a ceilometer.  
+            - Measures backscatter profiles of aerosols and clouds.  
+            - Commonly used in research on aerosol vertical distribution and boundary layer dynamics.  
+
+            ---
+            The DCCEEW lidar network consists of the following sites
+                - Lidcombe: Vaisala CL51 and Cimel MPL CE376GPN_2401
+                - Merriwa : Vaisala CL61
+                - Rozelle : Vaisala CL61
+                - Campbelltown : Vaisala CL51
+                - Singleton: Vaisala CL61
+                - Muswellbrook : Vaisala CL61
+
+            📌 *Both instruments help us understand how pollution mixes and disperses in the atmosphere.*
+            """,
+            unsafe_allow_html=True
+    )
+
 # -----------------------------
 # Main column: Site selection and viewer
 # -----------------------------
