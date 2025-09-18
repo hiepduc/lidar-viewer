@@ -56,13 +56,13 @@ with col1:
             - Commonly used in research on aerosol vertical distribution and boundary layer dynamics.  
 
             ---
-            The DCCEEW lidar network consists of the following sites.
-                - Lidcombe: Vaisala CL51 and Cimel MPL CE376GPN_2401.
-                - Merriwa : Vaisala CL61.
-                - Rozelle : Vaisala CL61.
-                - Campbelltown : Vaisala CL51.
-                - Singleton: Vaisala CL61.
-                - Muswellbrook : Vaisala CL61.
+            **The DCCEEW lidar network consists of the following sites.**
+            - Lidcombe: Vaisala CL51 and Cimel MPL CE376GPN_2401.
+            - Merriwa : Vaisala CL61.
+            - Rozelle : Vaisala CL61.
+            - Campbelltown : Vaisala CL51.
+            - Singleton: Vaisala CL61.
+            - Muswellbrook : Vaisala CL61.
 
             📌 *Both instruments help us understand how pollution mixes and disperses in the atmosphere.*
             """,
