@@ -123,40 +123,51 @@ with col2:
     # --- Convert to datetime.date objects ---
     available_datetimes = sorted([datetime.strptime(d, "%Y%m%d").date() for d in available_dates])
 
-    # Session state keys
+    # --- Session state key (use the same for everything) ---
     site_key = f"selected_date_{selected_site}"
 
     if available_datetimes:
         latest_date = max(available_datetimes)
 
-        # Initialize state only once
-        if site_key not in st.session_state or st.session_state[site_key] not in available_datetimes:
+        # Initialize per-site session state when missing or invalid
+        if site_key not in st.session_state:
             st.session_state[site_key] = latest_date
 
         # Date navigation buttons
         col_prev, col_mid, col_next = st.columns([1, 2, 1])
         with col_prev:
+            #if st.button("⬅️ Previous Day", key=f"prev_{selected_site}"):
+            #    idx = available_datetimes.index(st.session_state[site_key])
+            #    if idx > 0:
+            #        st.session_state[site_key] = available_datetimes[idx - 1]
             if st.button("⬅️ Previous Day", key=f"prev_{selected_site}"):
-                idx = available_datetimes.index(st.session_state[site_key])
-                if idx > 0:
-                    st.session_state[site_key] = available_datetimes[idx - 1]
+                if st.session_state[site_key] in available_datetimes:
+                    idx = available_datetimes.index(st.session_state[site_key])
+                    if idx > 0:
+                        st.session_state[site_key] = available_datetimes[idx - 1]
 
         with col_next:
-            if st.button("Next Day ➡️", key=f"next_{selected_site}"):
-                idx = available_datetimes.index(st.session_state[site_key])
-                if idx < len(available_datetimes) - 1:
-                    st.session_state[site_key] = available_datetimes[idx + 1]
+            #if st.button("Next Day ➡️", key=f"next_{selected_site}"):
+            #    idx = available_datetimes.index(st.session_state[site_key])
+            #    if idx < len(available_datetimes) - 1:
+            #        st.session_state[site_key] = available_datetimes[idx + 1]
+           if st.button("Next Day ➡️", key=f"next_{selected_site}"):
+               if st.session_state[site_key] in available_datetimes:
+                   idx = available_datetimes.index(st.session_state[site_key])
+                   if idx < len(available_datetimes) - 1:
+                       st.session_state[site_key] = available_datetimes[idx + 1]
 
-        # Manual date selection, bound to the same state
-        st.date_input(
+        # Manual date selection (same key as above!)
+        selected_date = st.date_input(
             "Select Date",
+            #value=st.session_state[site_key],
             min_value=min(available_datetimes),
             max_value=max(available_datetimes),
-            key=site_key   # ✅ same key as session state
+            key=site_key
         )
 
-        # Now selected_date is always synced
-        selected_date = st.session_state[site_key]
+        # Ensure sync
+        #st.session_state[site_key] = selected_date
         date_str = selected_date.strftime("%Y%m%d")
 
     else:
