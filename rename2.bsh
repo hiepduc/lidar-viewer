@@ -1,0 +1,4 @@
+for f in Muswellbrook_Ceilo_*.png; do
+    mv "$f" "${f/Muswellbrook_Ceilo_/Muswellbrook_Ceilometer_}"
+done
+
