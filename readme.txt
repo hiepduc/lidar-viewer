@@ -41,6 +41,16 @@ git push -u origin main
 
 Now your files (including images) are uploaded to GitHub!
 
+Next time to update with new added files
+in /mnt/scratch_lustre/duch/lidar/lidar-viewer-app
+
+git status
+git add *
+git status
+git commit -m "Update 2026"
+git push
+
+
 (5)  Deploy to Streamlit Cloud (Free)
 Go to https://streamlit.io/cloud
 
